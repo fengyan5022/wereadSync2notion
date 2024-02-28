@@ -23,6 +23,7 @@ def weread_2_notion(notion_token=NOTION_TOKEN,
         raise Exception(f'微信读书登录失败，{e}')
     try:
         notion = NotionClient(notion_token, database_id)
+        info(f'notion= {notion}')
     except Exception as e:
         raise Exception(f'notion 登录失败，{e}')
     # 书籍列表
@@ -46,7 +47,7 @@ def weread_2_notion(notion_token=NOTION_TOKEN,
                     put_text(f' 正在同步：《{title}》, 当前进度 {len(handled_book) + len(ignore_book)}/{len(books)}')
                 all_book.append(title)
                 if title in book_blacklist:
-                    info(f'《{title}》在黑名单中，跳过')
+                   # info(f'《{title}》在黑名单中，跳过')
                     ignore_book.append(title)
                     continue
                 # 调试用途代码
@@ -66,7 +67,7 @@ def weread_2_notion(notion_token=NOTION_TOKEN,
                 bookId = book.get("bookId", '-1')
                 author = book.get("author", '没有作者信息')
                 info(f'开始处理《{title}》, bookId={bookId}, sort={sort}')
-                notion.check(bookId)  # TODO 如果自行在 notion 修改，这里会删除重新插入，规避这个逻辑
+                #notion.check(bookId)  #暂时删掉TODO 如果自行在 notion 修改，这里会删除重新插入，规避这个逻辑
                 chapter = weread_.get_chapter_info(bookId)
                 bookmark_list = weread_.get_bookmark_list(bookId)
                 summary, reviews = weread_.get_review_list(bookId)
